@@ -2,6 +2,8 @@
 
 This is a simple skill for the Jibo robot. It allows Jibo to respond to requests to "look away" or "turn around" for a specified amount of time.
 
+This skill was built to solve a simple privacy issue by giving the user direct control to have Jibo hide his cameras for any length of time. This is important for when you need physical privacy or just don't want Jibo staring at you.
+
 ## Requirements:
 
 1. Atom Editor
