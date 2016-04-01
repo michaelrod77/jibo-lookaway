@@ -1,0 +1,787 @@
+{
+    "1": {
+        "id": 1,
+        "class": "Sequence",
+        "name": "Repeat forever",
+        "asset-pack": "core",
+        "children": [
+            20,
+            19,
+            59,
+            84
+        ],
+        "decorators": [
+            17
+        ],
+        "options": {}
+    },
+    "16": {
+        "id": 16,
+        "class": "Listen",
+        "name": "Listen for \"Hey Jibo\", then for \"turn around\" requests",
+        "asset-pack": "core",
+        "parent": 20,
+        "options": {
+            "getOptions": [
+                "() => {",
+                "    let options = {",
+                "        heyJibo: true,",
+                "        detectEnd: true,",
+                "        incremental: false,",
+                "        authenticateSpeaker: ''",
+                "    }",
+                "    return options;",
+                "}"
+            ],
+            "rule": "lookaway.rule",
+            "onResult": [
+                "(listener) => {",
+                "    listener.on('hey-jibo', function(asrResult, speakerIds){",
+                "        emitter.emit('listen');",
+                "        // Turn on LED",
+                "        jibo.animate.setLEDColor([0.8, 0.8, 1]); // l.blue",
+                "",
+                "    });",
+                "    listener.on('cloud', function(asrResult, speakerIds){",
+                "      notepad.results = asrResult.NLParse;",
+                "    });",
+                "}"
+            ]
+        }
+    },
+    "17": {
+        "id": 17,
+        "class": "WhileCondition",
+        "name": "",
+        "asset-pack": "core",
+        "options": {
+            "init": [
+                "() => {",
+                "}"
+            ],
+            "conditional": [
+                "() => {",
+                "    console.log(\"running main sequence\")",
+                "    return true;",
+                "}"
+            ]
+        }
+    },
+    "19": {
+        "id": 19,
+        "class": "Sequence",
+        "name": "",
+        "asset-pack": "core",
+        "parent": 1,
+        "children": [
+            35,
+            46
+        ],
+        "decorators": [],
+        "options": {}
+    },
+    "20": {
+        "id": 20,
+        "class": "Parallel",
+        "name": "",
+        "options": {
+            "succeedOnOne": false
+        },
+        "asset-pack": "core",
+        "parent": 1,
+        "children": [
+            83,
+            16,
+            "9a63905a-836f-4775-a891-b83b33287bb5"
+        ],
+        "decorators": [
+            30
+        ]
+    },
+    "30": {
+        "id": 30,
+        "class": "WhileCondition",
+        "name": "",
+        "asset-pack": "core",
+        "options": {
+            "init": [
+                "() => {",
+                "}"
+            ],
+            "conditional": [
+                "() => {",
+                "    if(notepad.results){ return false; }",
+                "    return true;",
+                "}"
+            ]
+        }
+    },
+    "32": {
+        "id": 32,
+        "class": "PlayAnimation",
+        "name": "Turn around.",
+        "asset-pack": "core",
+        "parent": 35,
+        "options": {
+            "animPath": "lookaway.keys",
+            "config": [
+                "(animation) => {",
+                "}"
+            ]
+        }
+    },
+    "34": {
+        "id": 34,
+        "class": "Blink",
+        "name": "",
+        "asset-pack": "core",
+        "parent": 35,
+        "options": {}
+    },
+    "35": {
+        "id": 35,
+        "class": "Parallel",
+        "name": "Say OK and turn around",
+        "asset-pack": "core",
+        "parent": 19,
+        "children": [
+            45,
+            34,
+            "35fac7c0-0bea-4fc6-917e-f7266ddc9c6d",
+            32,
+            63
+        ],
+        "options": {
+            "succeedOnOne": false
+        }
+    },
+    "45": {
+        "id": 45,
+        "class": "ExecuteScript",
+        "name": "Set global vars",
+        "asset-pack": "core",
+        "parent": 35,
+        "options": {
+            "exec": [
+                "() => {",
+                "  notepad.turningAround = true;",
+                "  notepad.turnedAround = false;",
+                "  ",
+                "  let results = notepad.results;",
+                "  notepad.quietMode = results.quietly;",
+                "}"
+            ]
+        }
+    },
+    "46": {
+        "id": 46,
+        "class": "Switch",
+        "name": "",
+        "asset-pack": "core",
+        "parent": 19,
+        "children": [
+            51,
+            55
+        ],
+        "options": {}
+    },
+    "49": {
+        "id": 49,
+        "class": "TextToSpeechJs",
+        "name": "Say amount of time to look away",
+        "asset-pack": "core",
+        "parent": 55,
+        "decorators": [],
+        "options": {
+            "getWords": [
+                "(callback) => {",
+                "    let  nHour = 0, nMin = 0, nSec = 0;",
+                "    let nSpeechText = \"\";",
+                "    let results = notepad.results;",
+                "    if(typeof results!==\"undefined\"){",
+                "      if(typeof results.hour!==\"undefined\"){ nHour = parseInt(results.hour); }",
+                "      if(typeof results.min!==\"undefined\"){ nMin = parseInt(results.min); }",
+                "      if(typeof results.sec!==\"undefined\"){ nSec = parseInt(results.sec); }",
+                "    }",
+                "    if(nHour){",
+                "      let nTimeUnit = \"hours\";",
+                "      if(nHour==1){ nTimeUnit = \"hour\"; }",
+                "      nSpeechText = nHour + \" \" + nTimeUnit + \" \";",
+                "    }",
+                "    if(nMin){",
+                "      let nTimeUnit = \"minutes\";",
+                "      if(nMin==1){ nTimeUnit = \"minute\"; }",
+                "      nSpeechText+= nMin + \" \" + nTimeUnit + \" \";",
+                "    }",
+                "    if(nSec){",
+                "      let nTimeUnit = \"seconds\";",
+                "      if(nSec==1){ nTimeUnit = \"second\"; }",
+                "      nSpeechText+= nSec + \" \" + nTimeUnit + \" \";",
+                "    }",
+                "    if(nSpeechText){ nSpeechText = \"For \" + nSpeechText; }",
+                "    if(nSpeechText){ callback(nSpeechText); }",
+                "}"
+            ],
+            "onWord": [
+                "(word) => {",
+                "}"
+            ]
+        }
+    },
+    "51": {
+        "id": 51,
+        "class": "Sequence",
+        "name": "Ask \"For How long?\" if needed",
+        "asset-pack": "core",
+        "parent": 46,
+        "decorators": [
+            52
+        ],
+        "children": [
+            54,
+            "35717a3e-99ac-4ea9-8329-055665103bfe",
+            57
+        ],
+        "options": {}
+    },
+    "52": {
+        "id": 52,
+        "class": "Case",
+        "name": "",
+        "asset-pack": "core",
+        "options": {
+            "conditional": [
+                "() => {",
+                "  let results = notepad.results;",
+                "  //console.log(results);",
+                "  if(parseInt(results.hour) || parseInt(results.min) || parseInt(results.sec)){",
+                "    return false;",
+                "  }",
+                "  return true;",
+                "}"
+            ]
+        }
+    },
+    "53": {
+        "id": 53,
+        "class": "Listen",
+        "name": "Listen for answer",
+        "asset-pack": "core",
+        "parent": 57,
+        "decorators": [],
+        "options": {
+            "getOptions": [
+                "() => {",
+                "    let options = {",
+                "        heyJibo: false,",
+                "        detectEnd: true,",
+                "        incremental: false,",
+                "        authenticateSpeaker: ''",
+                "    }",
+                "    console.log(\"Listening for 'how long'...\");",
+                "    return options;",
+                "}"
+            ],
+            "rule": "howlong.rule",
+            "onResult": [
+                "(listener) => {",
+                "    listener.on('cloud', (asrResult, speakerIds) => {",
+                "      //console.log(speakerIds);",
+                "      notepad.results = asrResult.NLParse;",
+                "    });",
+                "}"
+            ]
+        }
+    },
+    "54": {
+        "id": 54,
+        "class": "ExecuteScript",
+        "name": "Turn off LED",
+        "asset-pack": "core",
+        "parent": 51,
+        "options": {
+            "exec": [
+                "() => {",
+                "  notepad.results = {}; // reset results for new input",
+                "  jibo.animate.setLEDColor([0, 0, 0]);",
+                "  console.log(\"Turning off led...\");",
+                "}"
+            ]
+        },
+        "skipped": true
+    },
+    "55": {
+        "id": 55,
+        "class": "Sequence",
+        "name": "Say amount of time to look away",
+        "asset-pack": "core",
+        "parent": 46,
+        "decorators": [
+            56
+        ],
+        "children": [
+            49
+        ],
+        "options": {}
+    },
+    "56": {
+        "id": 56,
+        "class": "Case",
+        "name": "",
+        "asset-pack": "core",
+        "options": {
+            "conditional": [
+                "() => {",
+                "  let nHour = 0, nMin = 0, nSec = 0;",
+                "  let results = notepad.results;",
+                "  if(typeof results!==\"undefined\"){",
+                "    if(typeof results.hour!==\"undefined\"){ nHour = parseInt(results.hour); }",
+                "    if(typeof results.min!==\"undefined\"){  nMin = parseInt(results.min); }",
+                "    if(typeof results.sec!==\"undefined\"){  nSec = parseInt(results.sec); }",
+                "  }",
+                "  if(nHour || nMin || nSec){ return true; }",
+                "  return false;",
+                "}"
+            ]
+        }
+    },
+    "57": {
+        "id": 57,
+        "class": "Sequence",
+        "name": "",
+        "asset-pack": "core",
+        "parent": 51,
+        "children": [
+            53,
+            "e6477277-bddd-4d18-82b4-1e04303e0816"
+        ],
+        "decorators": [
+            58
+        ],
+        "options": {}
+    },
+    "58": {
+        "id": 58,
+        "class": "WhileCondition",
+        "name": "",
+        "asset-pack": "core",
+        "options": {
+            "init": [
+                "() => {",
+                "  self.startTime = Date.now();",
+                "  self.timeToWait = 10000; // wait up to 10 seconds for an answer",
+                "}"
+            ],
+            "conditional": [
+                "() => {",
+                "    console.log(\"listening\");",
+                "    if(notepad.results){ return false; }",
+                "    if(Date.now() - self.startTime > self.timeToWait){ return false; }",
+                "    return true;",
+                "}"
+            ]
+        }
+    },
+    "59": {
+        "id": 59,
+        "class": "Sequence",
+        "name": "",
+        "asset-pack": "core",
+        "parent": 1,
+        "children": [
+            95,
+            91
+        ],
+        "options": {}
+    },
+    "63": {
+        "id": 63,
+        "class": "ExecuteScript",
+        "name": "Set global vars",
+        "asset-pack": "core",
+        "parent": 35,
+        "decorators": [
+            97
+        ],
+        "options": {
+            "exec": [
+                "() => {",
+                "  console.log(\"Turn around complete...\");",
+                "  notepad.turningAround = false;",
+                "  notepad.turnedAround = true;",
+                "}"
+            ]
+        }
+    },
+    "83": {
+        "id": 83,
+        "class": "ExecuteScript",
+        "name": "Init notepad and vars",
+        "asset-pack": "core",
+        "parent": 20,
+        "options": {
+            "exec": [
+                "() => {",
+                "  console.log(\"Initializing notepad and vars...\");",
+                "  notepad.results = {};",
+                "  notepad.results.sec = \"\";",
+                "  notepad.results.min = \"\";",
+                "  notepad.results.hour = \"\";",
+                "  notepad.turningAround = false;",
+                "  notepad.turnedAround = false;",
+                "  notepad.quietMode = \"false\";",
+                "  //var animate = require(\"jibo\").animate;",
+                "  //animate.centerRobot();",
+                "}"
+            ]
+        }
+    },
+    "84": {
+        "id": 84,
+        "class": "Sequence",
+        "name": "",
+        "asset-pack": "core",
+        "parent": 1,
+        "children": [
+            87,
+            86,
+            "3335eedd-a84b-4a71-9a94-32b98dfb9cac",
+            90
+        ],
+        "options": {}
+    },
+    "86": {
+        "id": 86,
+        "class": "Subtree",
+        "name": "Backwards idle",
+        "asset-pack": "core",
+        "parent": 84,
+        "decorators": [
+            88
+        ],
+        "options": {
+            "behaviorPath": "backwards_idle.bt",
+            "getNotepad": [
+                "() => {",
+                "    return notepad;",
+                "}"
+            ],
+            "onResult": [
+                "(treeResult) => {",
+                "}"
+            ]
+        }
+    },
+    "87": {
+        "id": 87,
+        "class": "TimeoutJs",
+        "name": "Wait a few seconds",
+        "asset-pack": "core",
+        "parent": 84,
+        "options": {
+            "getTime": [
+                "() => {",
+                "    return 3000;",
+                "}"
+            ]
+        }
+    },
+    "88": {
+        "id": 88,
+        "class": "SucceedOnEmbedded",
+        "name": "",
+        "asset-pack": "core",
+        "options": {
+            "rule": "hey_jibo",
+            "onResult": [
+                "(listener) => {",
+                "\tlistener.on('hey-jibo', (asrResult, speakerIds) => {",
+                "\t\tconsole.log(\"Heard 'hey jibo'. Ending 'look away' mode.\");",
+                "\t});",
+                "}"
+            ]
+        }
+    },
+    "90": {
+        "id": 90,
+        "class": "PlayAudio",
+        "name": "End behavior with BLOOP",
+        "asset-pack": "core",
+        "parent": 84,
+        "options": {
+            "audioPath": "FX_Bloop.mp3"
+        }
+    },
+    "91": {
+        "id": 91,
+        "class": "TimeoutJs",
+        "name": "Wait half-second",
+        "asset-pack": "core",
+        "parent": 59,
+        "options": {
+            "getTime": [
+                "() => {",
+                "    return 500;",
+                "}"
+            ]
+        }
+    },
+    "92": {
+        "id": 92,
+        "class": "PlayAudio",
+        "name": "if not in quiet mode",
+        "asset-pack": "core",
+        "parent": 95,
+        "decorators": [
+            96
+        ],
+        "options": {
+            "audioPath": "FX_Bleep.mp3"
+        }
+    },
+    "95": {
+        "id": 95,
+        "class": "Switch",
+        "name": "Go into \"look away\" mode with BLEEP",
+        "asset-pack": "core",
+        "parent": 59,
+        "children": [
+            92
+        ],
+        "options": {}
+    },
+    "96": {
+        "id": 96,
+        "class": "Case",
+        "name": "",
+        "asset-pack": "core",
+        "options": {
+            "conditional": [
+                "() => {",
+                "  console.log(\"checking if in quiet mode\");",
+                "  if(typeof notepad.quietMode!=='undefined' || notepad.quietMode==\"false\"){ console.log(\"In quiet mode. Not making noise.\"); return false; }",
+                "  return true;",
+                "}"
+            ]
+        }
+    },
+    "97": {
+        "id": 97,
+        "class": "StartOnAnimEvent",
+        "name": "",
+        "asset-pack": "core",
+        "options": {
+            "eventName": "lookawayComplete",
+            "onReceived": [
+                "(animFileName, payload) => {",
+                "}"
+            ]
+        }
+    },
+    "meta": {
+        "version": 1
+    },
+    "3335eedd-a84b-4a71-9a94-32b98dfb9cac": {
+        "id": "3335eedd-a84b-4a71-9a94-32b98dfb9cac",
+        "class": "ExecuteScript",
+        "name": "// CENTER ROBOT",
+        "options": {
+            "exec": [
+                "() => {",
+                "  var animate = require(\"jibo\").animate;",
+                "  animate.centerRobot();",
+                "  console.log(\"centering robot:\",animate);",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": 84
+    },
+    "35fac7c0-0bea-4fc6-917e-f7266ddc9c6d": {
+        "id": "35fac7c0-0bea-4fc6-917e-f7266ddc9c6d",
+        "class": "TextToSpeechJs",
+        "name": "Say 'Alright'",
+        "options": {
+            "getWords": [
+                "(callback) => {",
+                "    let nPhraseARRAY = [\"Alright.\", \"Sure.\", \"No problem.\", \"Okay\", \"Ill do it.\"];",
+                "    var nRandPhrase = nPhraseARRAY[Math.floor(Math.random()*nPhraseARRAY.length)];",
+                "    callback(nRandPhrase);",
+                "}"
+            ],
+            "onWord": [
+                "(word) => {",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": 35
+    },
+    "35717a3e-99ac-4ea9-8329-055665103bfe": {
+        "id": "35717a3e-99ac-4ea9-8329-055665103bfe",
+        "class": "TextToSpeechJs",
+        "name": "Ask \"For How long?\" if needed",
+        "options": {
+            "getWords": [
+                "(callback) => {",
+                "    let nPhraseARRAY = [",
+                "      //\"<speak>How long should I look away, <phoneme ph=\"s aa n d r aa\">Sandra</phoneme>?</speak>\",",
+                "      \"For how long?\",",
+                "      \"How long should I look away?\",",
+                "      \"How long do you want me to look away for?\"",
+                "    ];",
+                "    var nRandPhrase = nPhraseARRAY[Math.floor(Math.random()*nPhraseARRAY.length)];",
+                "    callback(nRandPhrase);",
+                "}"
+            ],
+            "onWord": [
+                "(word) => {",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": 51
+    },
+    "96c68c15-fba4-4147-82d2-5f0e3ee614c4": {
+        "id": "96c68c15-fba4-4147-82d2-5f0e3ee614c4",
+        "class": "Subtree",
+        "name": "",
+        "options": {
+            "behaviorPath": "idle.bt",
+            "getNotepad": [
+                "() => {",
+                "    return {};",
+                "}"
+            ],
+            "onResult": [
+                "(treeResult) => {",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": "9a63905a-836f-4775-a891-b83b33287bb5",
+        "decorators": [
+            "ffb5c23c-3233-499e-86ad-b1282543401c"
+        ]
+    },
+    "9a63905a-836f-4775-a891-b83b33287bb5": {
+        "id": "9a63905a-836f-4775-a891-b83b33287bb5",
+        "class": "Sequence",
+        "name": "Idle until \"Hey Jibo\"",
+        "options": {},
+        "asset-pack": "core",
+        "parent": 20,
+        "children": [
+            "96c68c15-fba4-4147-82d2-5f0e3ee614c4",
+            "697d9d41-5509-4f40-9378-7b45fa801bb8"
+        ]
+    },
+    "ffb5c23c-3233-499e-86ad-b1282543401c": {
+        "id": "ffb5c23c-3233-499e-86ad-b1282543401c",
+        "class": "SucceedOnEvent",
+        "name": "",
+        "options": {
+            "eventName": "listen",
+            "onEvent": [
+                "() => {",
+                "}"
+            ]
+        },
+        "asset-pack": "core"
+    },
+    "697d9d41-5509-4f40-9378-7b45fa801bb8": {
+        "id": "697d9d41-5509-4f40-9378-7b45fa801bb8",
+        "class": "Parallel",
+        "name": "",
+        "options": {
+            "succeedOnOne": false
+        },
+        "asset-pack": "core",
+        "parent": "9a63905a-836f-4775-a891-b83b33287bb5",
+        "children": [
+            "63ff60a7-ba40-414e-ade2-574ee3d2fad1",
+            "16b32a1e-430b-4941-a549-18417b948540"
+        ]
+    },
+    "63ff60a7-ba40-414e-ade2-574ee3d2fad1": {
+        "id": "63ff60a7-ba40-414e-ade2-574ee3d2fad1",
+        "class": "PlayAudio",
+        "name": "",
+        "options": {
+            "audioPath": "FXMR_Hello.mp3"
+        },
+        "asset-pack": "core",
+        "parent": "697d9d41-5509-4f40-9378-7b45fa801bb8"
+    },
+    "16b32a1e-430b-4941-a549-18417b948540": {
+        "id": "16b32a1e-430b-4941-a549-18417b948540",
+        "class": "LookAt",
+        "name": "look at closest entity",
+        "options": {
+            "getTarget": [
+                "() => {",
+                "\tlet jibo = require('jibo');\t",
+                "\tlet entity = jibo.lps.getClosestVisualEntity();",
+                "\t",
+                "\t// x is meters forward, y is meters left, and z is meters up",
+                "  let nDefaultPosition = {x: 0.1, y: 0, z: 0.285}; // emulates initial \"center\"",
+                "  let position = nDefaultPosition;",
+                "",
+                "\tif (entity && entity.parts.length > 0) {",
+                "\t\tlet raysData = entity.parts[0].value.rays;",
+                "\t\tif (raysData !== undefined && raysData.length > 0) {",
+                "\t\t\tlet origin = entity.parts[0].value.rays[0].origin;",
+                "\t\t\tlet dir = entity.parts[0].value.rays[0].dir;",
+                "\t\t\tposition\t= {x: dir.x + origin.x, y:dir.y + origin.y, z: dir.z + origin.z};",
+                "\t\t}",
+                "\t}",
+                "\treturn position;",
+                "}"
+            ],
+            "isContinuous": false,
+            "config": [
+                "(lookAt) => {",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": "697d9d41-5509-4f40-9378-7b45fa801bb8"
+    },
+    "e6477277-bddd-4d18-82b4-1e04303e0816": {
+        "id": "e6477277-bddd-4d18-82b4-1e04303e0816",
+        "class": "ExecuteScript",
+        "name": "process response",
+        "options": {
+            "exec": [
+                "() => {",
+                "  let  nHour = 0, nMin = 0, nSec = 0;",
+                "  let nSpeechText = \"\";",
+                "  let results = notepad.results;",
+                "  if(typeof results!==\"undefined\"){",
+                "    if(typeof results.hour!==\"undefined\"){ nHour = parseInt(results.hour); }",
+                "    if(typeof results.min!==\"undefined\"){ nMin = parseInt(results.min); }",
+                "    if(typeof results.sec!==\"undefined\"){ nSec = parseInt(results.sec); }",
+                "  }",
+                "  if(nHour){",
+                "    let nTimeUnit = \"hours\";",
+                "    if(nHour==1){ nTimeUnit = \"hour\"; }",
+                "    nSpeechText = nHour + \" \" + nTimeUnit + \" \";",
+                "  }",
+                "  if(nMin){",
+                "    let nTimeUnit = \"minutes\";",
+                "    if(nMin==1){ nTimeUnit = \"minute\"; }",
+                "    nSpeechText+= nMin + \" \" + nTimeUnit + \" \";",
+                "  }",
+                "  if(nSec){",
+                "    let nTimeUnit = \"seconds\";",
+                "    if(nSec==1){ nTimeUnit = \"second\"; }",
+                "    nSpeechText+= nSec + \" \" + nTimeUnit + \" \";",
+                "  }",
+                "  console.log(\"nSpeechText:\",nSpeechText);",
+                "}"
+            ]
+        },
+        "asset-pack": "core",
+        "parent": 57
+    }
+}

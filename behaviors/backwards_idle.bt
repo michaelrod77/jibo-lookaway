@@ -1,0 +1,438 @@
+{
+    "3": {
+        "id": 3,
+        "class": "Parallel",
+        "name": "",
+        "asset-pack": "core",
+        "children": [
+            54,
+            31,
+            19,
+            16
+        ],
+        "decorators": [
+            25
+        ],
+        "options": {
+            "succeedOnOne": false
+        }
+    },
+    "16": {
+        "id": 16,
+        "class": "Sequence",
+        "name": "",
+        "asset-pack": "core",
+        "parent": 3,
+        "children": [
+            18,
+            17
+        ],
+        "decorators": [
+            23
+        ],
+        "options": {}
+    },
+    "17": {
+        "id": 17,
+        "class": "LookAt",
+        "name": "Choose place to look",
+        "asset-pack": "core",
+        "parent": 16,
+        "options": {
+            "getTarget": [
+                "() => {",
+                "\tlet x = -1; // backwards",
+                "\tlet y = 0; //(1 - 2 * Math.random()); // between -1 and 1",
+                "\tlet z = 0.7 + 0.25 * (1 - 2 * Math.random());",
+                "\treturn {x: x, y: y, z: z};",
+                "}"
+            ]
+        }
+    },
+    "18": {
+        "id": 18,
+        "class": "TimeoutJs",
+        "asset-pack": "core",
+        "parent": 16,
+        "name": "Pause for a bit (0-24 sec)",
+        "options": {
+            "getTime": [
+                "() => {",
+                "   return 24000 * Math.random();",
+                "}"
+            ]
+        }
+    },
+    "19": {
+        "id": 19,
+        "class": "Sequence",
+        "name": "",
+        "asset-pack": "core",
+        "parent": 3,
+        "children": [
+            21,
+            20
+        ],
+        "decorators": [
+            22
+        ],
+        "options": {}
+    },
+    "20": {
+        "id": 20,
+        "class": "Blink",
+        "asset-pack": "core",
+        "parent": 19,
+        "options": {}
+    },
+    "21": {
+        "id": 21,
+        "class": "TimeoutJs",
+        "name": "Pause for a bit (0-8 sec)",
+        "asset-pack": "core",
+        "parent": 19,
+        "options": {
+            "getTime": [
+                "() => {",
+                "   return 2000 + 6000 * Math.random();",
+                "}"
+            ]
+        }
+    },
+    "22": {
+        "id": 22,
+        "class": "WhileCondition",
+        "name": "",
+        "asset-pack": "core",
+        "options": {
+            "init": [
+                "() => {",
+                "}"
+            ],
+            "conditional": [
+                "() => {",
+                "  return true;",
+                "}"
+            ]
+        }
+    },
+    "23": {
+        "id": 23,
+        "class": "WhileCondition",
+        "name": "",
+        "asset-pack": "core",
+        "options": {
+            "init": [
+                "() => {",
+                "}"
+            ],
+            "conditional": [
+                "() => {",
+                "  return true;",
+                "}"
+            ]
+        }
+    },
+    "25": {
+        "id": 25,
+        "class": "TimeoutSucceedJs",
+        "name": "",
+        "asset-pack": "core",
+        "options": {
+            "getTime": [
+                "() => {",
+                "  console.log(\"notepad from main.bt:\",notepad);",
+                "  ",
+                "  let nMilliseconds = 0, nHour = 0, nMin = 1, nSec = 0; // default",
+                "  let results = notepad.results;",
+                "  if(typeof results!==\"undefined\"){",
+                "    if(typeof results.hour!==\"undefined\"){ nHour = parseInt(results.hour); }",
+                "    if(typeof results.min!==\"undefined\"){  nMin = parseInt(results.min); }",
+                "    if(typeof results.sec!==\"undefined\"){  nSec = parseInt(results.sec); }",
+                "  }",
+                "  if(nSec){ nMilliseconds+= (nSec*1000); }",
+                "  if(nMin){ nMilliseconds+= (nMin*60000); }",
+                "  if(nHour){ nMilliseconds+= (nHour*60000*60); }",
+                "  console.log(\"Set timer for \"+(nMilliseconds/1000)+\" seconds.\");",
+                "  return nMilliseconds;",
+                "}"
+            ]
+        }
+    },
+    "27": {
+        "id": 27,
+        "class": "Random",
+        "name": "Whistle",
+        "asset-pack": "core",
+        "parent": 126,
+        "children": [
+            57,
+            88
+        ],
+        "decorators": [
+            127
+        ],
+        "options": {}
+    },
+    "28": {
+        "id": 28,
+        "class": "PlayAudio",
+        "name": "Blip",
+        "asset-pack": "core",
+        "parent": 57,
+        "options": {
+            "audioPath": "FX_Blip.mp3"
+        }
+    },
+    "31": {
+        "id": 31,
+        "class": "Sequence",
+        "name": "",
+        "asset-pack": "core",
+        "parent": 3,
+        "decorators": [
+            32
+        ],
+        "children": [
+            33,
+            49
+        ],
+        "options": {}
+    },
+    "32": {
+        "id": 32,
+        "class": "WhileCondition",
+        "name": "",
+        "asset-pack": "core",
+        "options": {
+            "init": [
+                "() => {",
+                "}"
+            ],
+            "conditional": [
+                "() => {",
+                "    return true;",
+                "}"
+            ]
+        }
+    },
+    "33": {
+        "id": 33,
+        "class": "TimeoutJs",
+        "name": "Pause for up to 45 sec.",
+        "asset-pack": "core",
+        "parent": 31,
+        "options": {
+            "getTime": [
+                "() => {",
+                "   return 45000 * Math.random();",
+                "}"
+            ]
+        }
+    },
+    "45": {
+        "id": 45,
+        "class": "PlayAnimation",
+        "name": "Music eye",
+        "asset-pack": "core",
+        "parent": 57,
+        "options": {
+            "animPath": "whistle_eye.keys",
+            "config": [
+                "(animation) => {",
+                "}"
+            ]
+        }
+    },
+    "46": {
+        "id": 46,
+        "class": "PlayAudio",
+        "name": "Bloop",
+        "asset-pack": "core",
+        "parent": 88,
+        "options": {
+            "audioPath": "FX_Bloop.mp3"
+        }
+    },
+    "49": {
+        "id": 49,
+        "class": "Parallel",
+        "name": "",
+        "asset-pack": "core",
+        "parent": 31,
+        "children": [
+            126
+        ],
+        "options": {
+            "succeedOnOne": false
+        }
+    },
+    "51": {
+        "id": 51,
+        "class": "Listen",
+        "name": "Listen for \"Quiet\" mode",
+        "asset-pack": "core",
+        "parent": 54,
+        "options": {
+            "getOptions": [
+                "() => {",
+                "    console.log(\"listening for 'quiet' mode\");",
+                "    let options = {",
+                "        heyJibo: false,",
+                "        detectEnd: true,",
+                "        incremental: false,",
+                "        authenticateSpeaker: ''",
+                "    }",
+                "    return options;",
+                "}"
+            ],
+            "rule": "quietly.rule",
+            "onResult": [
+                "(listener) => {",
+                "    listener.on('cloud', (asrResult, speakerIds) => {",
+                "      notepad.quietMode = true;",
+                "    });",
+                "}"
+            ]
+        }
+    },
+    "54": {
+        "id": 54,
+        "class": "Sequence",
+        "name": "",
+        "asset-pack": "core",
+        "parent": 3,
+        "children": [
+            51,
+            128,
+            55
+        ],
+        "options": {}
+    },
+    "55": {
+        "id": 55,
+        "class": "PlayAudio",
+        "name": "Bleep",
+        "asset-pack": "core",
+        "parent": 54,
+        "options": {
+            "audioPath": "FX_Bleep.mp3"
+        }
+    },
+    "57": {
+        "id": 57,
+        "class": "Parallel",
+        "name": "",
+        "asset-pack": "core",
+        "parent": 27,
+        "children": [
+            45,
+            58,
+            28
+        ],
+        "options": {
+            "succeedOnOne": false
+        }
+    },
+    "58": {
+        "id": 58,
+        "class": "ExecuteScript",
+        "name": "",
+        "asset-pack": "core",
+        "parent": 57,
+        "options": {
+            "exec": [
+                "() => {",
+                "  console.log(\"blip\");",
+                "}"
+            ]
+        }
+    },
+    "88": {
+        "id": 88,
+        "class": "Parallel",
+        "name": "",
+        "asset-pack": "core",
+        "parent": 27,
+        "children": [
+            90,
+            89,
+            46
+        ],
+        "options": {
+            "succeedOnOne": false
+        }
+    },
+    "89": {
+        "id": 89,
+        "class": "ExecuteScript",
+        "name": "",
+        "asset-pack": "core",
+        "parent": 88,
+        "options": {
+            "exec": [
+                "() => {",
+                "  console.log(\"bloop\");",
+                "}"
+            ]
+        }
+    },
+    "90": {
+        "id": 90,
+        "class": "PlayAnimation",
+        "name": "Music eye",
+        "asset-pack": "core",
+        "parent": 88,
+        "options": {
+            "animPath": "whistle_eye.keys",
+            "config": [
+                "(animation) => {",
+                "}"
+            ]
+        }
+    },
+    "126": {
+        "id": 126,
+        "class": "Switch",
+        "name": "",
+        "asset-pack": "core",
+        "parent": 49,
+        "children": [
+            27
+        ],
+        "options": {}
+    },
+    "127": {
+        "id": 127,
+        "class": "Case",
+        "name": "",
+        "asset-pack": "core",
+        "options": {
+            "conditional": [
+                "() => {",
+                "  console.log(\"checking if in quiet mode\");",
+                "  console.log(notepad.quietMode);",
+                "  if(typeof notepad.quietMode!=='undefined' || notepad.quietMode==\"false\"){ console.log(\"yes, we are. not playing music\"); return false; }",
+                "  return true;",
+                "}"
+            ]
+        }
+    },
+    "128": {
+        "id": 128,
+        "class": "ExecuteScript",
+        "name": "",
+        "asset-pack": "core",
+        "parent": 54,
+        "options": {
+            "exec": [
+                "() => {",
+                "  console.log(\"Entering quiet mode...\");",
+                "}"
+            ]
+        }
+    },
+    "meta": {
+        "version": 1
+    }
+}

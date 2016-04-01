@@ -1,0 +1,19 @@
+# Allow Jibo to receive a period of time
+#
+# Returns:
+# "NLParse": {
+#   "quietMode": "true"
+# },
+#
+# Written by Michael Rodriguez, The Web Pro Miami, Ver.0.1.2016-01-20
+
+TopRule = $* (
+    (quietly | (be quiet) | (shut up)  | (shut it) | please) {quietMode = 'true'}
+) $*;
+
+# Variable words and phrases
+
+# Simple words and phrases
+
+# Factory
+time = $factory:timer{_hour=timer._hours}{_min=timer._minutes}{_sec=timer._seconds};

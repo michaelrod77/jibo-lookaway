@@ -1,0 +1,41 @@
+# Allow Jibo to understand the following phrases and combinations of...
+# "Could you look away please?"
+# "Can you turn around?"
+# "Could you please stop staring at me?"
+# "Look somewhere else for a sec."
+# "Close your eyes for 5 minutes please."
+#
+# Returns:
+# "NLParse": {
+#   "lookaway": "true",
+#   "sec": "1", // may be null
+#   "min": "1", // may be null
+#   "hour": "1", // may be null
+#   "quietly": "true"
+# },
+#
+# Written by Michael Rodriguez, The Web Pro Miami, Ver.0.1.2016-01-20
+
+TopRule = $* (
+    $lookaway {lookaway = 'true'} {hour = lookaway._hour}{min = lookaway._min}{sec = lookaway._sec} *$quietly {quietly = 'true'} |
+    $stoplooking {lookaway = 'true'} {hour = stoplooking._hour}{min = stoplooking._min}{sec = stoplooking._sec} *$quietly {quietly = 'true'} |
+    $closeyoureyes {lookaway = 'true'} {hour = closeyoureyes._hour}{min = closeyoureyes._min}{sec = closeyoureyes._sec} *$quietly {quietly = 'true'}
+) $*;
+
+# Variable words and phrases
+lookaway = ($look $away){_hour = '0'}{_min = '0'}{_sec = '0'} | ($look $away $* ($sec | $min | $bit){_hour = '0'}{_min = '1'}{_sec = '0'}) | ($look $away $* $time {_hour = time._hour}{_min = time._min}{_sec = time._sec});
+stoplooking = ($stop $looking at me){_hour = '0'}{_min = '0'}{_sec = '0'} | ($stop $looking at me $* ($sec | $min | $bit){_hour = '0'}{_min = '1'}{_sec = '0'}) | ($stop $looking at me  $* $time {_hour = time._hour}{_min = time._min}{_sec = time._sec});
+closeyoureyes = (close your eyes){_hour = '0'}{_min = '0'}{_sec = '0'} | (close your eyes $* ($sec | $min | $bit){_hour = '0'}{_min = '1'}{_sec = '0'}) | (close your eyes  $* $time {_hour = time._hour}{_min = time._min}{_sec = time._sec});
+
+# Simple words and phrases
+sec = sec | second;
+min = (a few seconds) | (a tiny bit) | minute;
+bit = bit | (little bit);
+look = look | turn;
+away = away | around | (somewhere else);
+stop = stop | quit;
+looking = looking | staring;
+quietly = quietly | silently;
+
+# Factory
+time = $factory:timer{_hour=timer._hours}{_min=timer._minutes}{_sec=timer._seconds};

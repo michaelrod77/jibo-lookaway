@@ -1,0 +1,22 @@
+# Allow Jibo to receive a period of time
+#
+# Returns:
+# "NLParse": {
+#   "howlong": "true",
+#   "sec": "1", // may be null
+#   "min": "1", // may be null
+#   "hour": "1", // may be null
+# },
+#
+# Written by Michael Rodriguez, The Web Pro Miami, Ver.0.1.2016-01-20
+
+TopRule = $* (
+    $time {howlong = 'true'} {hour = time._hour}{min = time._min}{sec = time._sec}
+) $*;
+
+# Variable words and phrases
+
+# Simple words and phrases
+
+# Factory
+time = $factory:timer{_hour=timer._hours}{_min=timer._minutes}{_sec=timer._seconds};
