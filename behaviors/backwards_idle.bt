@@ -54,11 +54,13 @@
         "class": "TimeoutJs",
         "asset-pack": "core",
         "parent": 16,
-        "name": "Pause for a bit (0-24 sec)",
+        "name": "Pause for a bit (5-30 sec)",
         "options": {
             "getTime": [
                 "() => {",
-                "   return 24000 * Math.random();",
+                "   var nPauseTime = 5000 + 25000 * Math.random();",
+                "   console.log(\"Pausing movement for:\",nPauseTime);",
+                "   return nPauseTime;",
                 "}"
             ]
         }
@@ -88,13 +90,14 @@
     "21": {
         "id": 21,
         "class": "TimeoutJs",
-        "name": "Pause for a bit (0-8 sec)",
+        "name": "Pause for a bit (2-8 sec)",
         "asset-pack": "core",
         "parent": 19,
         "options": {
             "getTime": [
                 "() => {",
-                "   return 2000 + 6000 * Math.random();",
+                "   var nPauseTime = 2000 + 6000 * Math.random();",
+                "   return nPauseTime;",
                 "}"
             ]
         }
@@ -141,8 +144,6 @@
         "options": {
             "getTime": [
                 "() => {",
-                "  console.log(\"notepad from main.bt:\",notepad);",
-                "  ",
                 "  let nMilliseconds = 0, nHour = 0, nMin = 1, nSec = 0; // default",
                 "  let results = notepad.results;",
                 "  if(typeof results!==\"undefined\"){",
@@ -153,7 +154,8 @@
                 "  if(nSec){ nMilliseconds+= (nSec*1000); }",
                 "  if(nMin){ nMilliseconds+= (nMin*60000); }",
                 "  if(nHour){ nMilliseconds+= (nHour*60000*60); }",
-                "  console.log(\"Set timer for \"+(nMilliseconds/1000)+\" seconds.\");",
+                "  var nCurrTime = Math.round(new Date().getTime()/1000);",
+                "  console.log(\"TIMER: Set timer for \"+(nMilliseconds/1000)+\" seconds at \"+nCurrTime+\".\");",
                 "  return nMilliseconds;",
                 "}"
             ]
@@ -162,7 +164,7 @@
     "27": {
         "id": 27,
         "class": "Random",
-        "name": "Whistle",
+        "name": "Make a noise",
         "asset-pack": "core",
         "parent": 126,
         "children": [
@@ -225,7 +227,9 @@
         "options": {
             "getTime": [
                 "() => {",
-                "   return 45000 * Math.random();",
+                "   var nPauseTime = 45000 * Math.random();",
+                "   console.log(\"Pausing chirp for:\",nPauseTime);",
+                "   return nPauseTime;",
                 "}"
             ]
         }

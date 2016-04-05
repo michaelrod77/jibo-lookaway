@@ -1,7 +1,7 @@
 {
     "version": "0.5.0",
     "framerate": 30,
-    "duration": 60,
+    "duration": 50,
     "scale": "1",
     "layers": [
         {
@@ -174,7 +174,7 @@
                             "y": 300
                         }
                     },
-                    "time": 50
+                    "time": 40
                 },
                 {
                     "value": {
@@ -229,17 +229,9 @@
                             "y": 300
                         }
                     },
-                    "time": 59
+                    "time": 49
                 }
             ]
-        },
-        {
-            "id": "8dd9a9028f1d48e7ba075ac1cf489f7b",
-            "name": "Eye Texture",
-            "type": "Eye Texture",
-            "visible": true,
-            "locked": false,
-            "keyframes": []
         },
         {
             "id": "5430235209e64182b38ea30e25e290e1",
@@ -259,7 +251,7 @@
                             "value": "sineInOut"
                         }
                     },
-                    "time": 0
+                    "time": 5
                 },
                 {
                     "value": {
@@ -272,7 +264,7 @@
                             "value": "sineInOut"
                         }
                     },
-                    "time": 59
+                    "time": 49
                 }
             ]
         },
@@ -301,12 +293,12 @@
                             "b": 255
                         }
                     },
-                    "time": 59
+                    "time": 49
                 }
             ]
         },
         {
-            "id": "ff03c80021b646f49bdccac9a3eb3814",
+            "id": "9416bb1b98614488bef48f39ce62e856",
             "name": "Event",
             "type": "Event",
             "visible": true,
@@ -319,7 +311,7 @@
                             "payload": ""
                         }
                     },
-                    "time": 59
+                    "time": 49
                 }
             ]
         }

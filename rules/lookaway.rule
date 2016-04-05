@@ -1,8 +1,8 @@
 # Allow Jibo to understand the following phrases and combinations of...
 # "Could you look away please?"
-# "Can you turn around?"
+# "Can you turn around for a bit?"
 # "Could you please stop staring at me?"
-# "Look somewhere else for a sec."
+# "Look somewhere else for a couple of minutes."
 # "Close your eyes for 5 minutes please."
 #
 # Returns:
@@ -14,28 +14,54 @@
 #   "quietly": "true"
 # },
 #
-# Written by Michael Rodriguez, The Web Pro Miami, Ver.0.1.2016-01-20
+# Written by Michael Rodriguez, The Web Pro Miami, Ver.0.2.2016-04-04
 
 TopRule = $* (
-    $lookaway {lookaway = 'true'} {hour = lookaway._hour}{min = lookaway._min}{sec = lookaway._sec} *$quietly {quietly = 'true'} |
-    $stoplooking {lookaway = 'true'} {hour = stoplooking._hour}{min = stoplooking._min}{sec = stoplooking._sec} *$quietly {quietly = 'true'} |
-    $closeyoureyes {lookaway = 'true'} {hour = closeyoureyes._hour}{min = closeyoureyes._min}{sec = closeyoureyes._sec} *$quietly {quietly = 'true'}
+    ($lookaway {lookaway = 'true'} {hour = lookaway._hour}{min = lookaway._min}{sec = lookaway._sec} *$quietly {quietly = 'true'}) |
+    ($stoplooking {lookaway = 'true'} {hour = stoplooking._hour}{min = stoplooking._min}{sec = stoplooking._sec} *$quietly {quietly = 'true'}) |
+    ($closeyoureyes {lookaway = 'true'} {hour = closeyoureyes._hour}{min = closeyoureyes._min}{sec = closeyoureyes._sec} *$quietly {quietly = 'true'})
 ) $*;
 
 # Variable words and phrases
-lookaway = ($look $away){_hour = '0'}{_min = '0'}{_sec = '0'} | ($look $away $* ($sec | $min | $bit){_hour = '0'}{_min = '1'}{_sec = '0'}) | ($look $away $* $time {_hour = time._hour}{_min = time._min}{_sec = time._sec});
-stoplooking = ($stop $looking at me){_hour = '0'}{_min = '0'}{_sec = '0'} | ($stop $looking at me $* ($sec | $min | $bit){_hour = '0'}{_min = '1'}{_sec = '0'}) | ($stop $looking at me  $* $time {_hour = time._hour}{_min = time._min}{_sec = time._sec});
-closeyoureyes = (close your eyes){_hour = '0'}{_min = '0'}{_sec = '0'} | (close your eyes $* ($sec | $min | $bit){_hour = '0'}{_min = '1'}{_sec = '0'}) | (close your eyes  $* $time {_hour = time._hour}{_min = time._min}{_sec = time._sec});
+lookaway =
+    ($look $away){_hour = '0'}{_min = '0'}{_sec = '0'} |
+    ($look $away $* ($sec | $min | $bit){_hour = '0'}{_min = '1'}{_sec = '0'}) |
+    ($look $away $* (couple *of minutes){_hour = '0'}{_min = '2'}{_sec = '0'}) |
+    ($look $away $* (few minutes){_hour = '0'}{_min = '3'}{_sec = '0'}) |
+    ($look $away $* (couple *of hours){_hour = '2'}{_min = '0'}{_sec = '0'}) |
+    ($look $away $* (few hours){_hour = '3'}{_min = '0'}{_sec = '0'}) |
+    ($look $away $* $time {_hour = time._hour}{_min = time._min}{_sec = time._sec}) |
+    ($look $away $* $forever {_hour = '999'}{_min = '0'}{_sec = '0'});
+stoplooking =
+    ($stop $looking at me){_hour = '0'}{_min = '0'}{_sec = '0'} |
+    ($stop $looking at me $* ($sec | $min | $bit){_hour = '0'}{_min = '1'}{_sec = '0'}) |
+    ($stop $looking at me $* (couple *of minutes){_hour = '0'}{_min = '2'}{_sec = '0'}) |
+    ($stop $looking at me $* (few minutes){_hour = '0'}{_min = '3'}{_sec = '0'}) |
+    ($stop $looking at me $* (couple *of hours){_hour = '2'}{_min = '0'}{_sec = '0'}) |
+    ($stop $looking at me $* (few hours){_hour = '3'}{_min = '0'}{_sec = '0'}) |
+    ($stop $looking at me $* $time {_hour = time._hour}{_min = time._min}{_sec = time._sec}) |
+    ($stop $looking at me $* $forever {_hour = '999'}{_min = '0'}{_sec = '0'});
+closeyoureyes =
+    (close your eyes){_hour = '0'}{_min = '0'}{_sec = '0'} |
+    (close your eyes $* ($sec | $min | $bit){_hour = '0'}{_min = '1'}{_sec = '0'}) |
+    (close your eyes $* (couple *of minutes){_hour = '0'}{_min = '2'}{_sec = '0'}) |
+    (close your eyes $* (few minutes){_hour = '0'}{_min = '3'}{_sec = '0'}) |
+    (close your eyes $* (couple *of hours){_hour = '2'}{_min = '0'}{_sec = '0'}) |
+    (close your eyes $* (few hours){_hour = '3'}{_min = '0'}{_sec = '0'}) |
+    (close your eyes $* $time {_hour = time._hour}{_min = time._min}{_sec = time._sec}) |
+    (close your eyes $* $forever {_hour = '999'}{_min = '0'}{_sec = '0'}) |
+    (go to sleep {_hour = '999'}{_min = '0'}{_sec = '0'});
 
 # Simple words and phrases
 sec = sec | second;
-min = (a few seconds) | (a tiny bit) | minute;
+min = (a couple *of seconds) | (a few seconds) | (a tiny bit) | minute;
 bit = bit | (little bit);
 look = look | turn;
 away = away | around | (somewhere else);
 stop = stop | quit;
 looking = looking | staring;
 quietly = quietly | silently;
+forever = (i say) | (i tell you) | (forever) | (sleep);
 
 # Factory
 time = $factory:timer{_hour=timer._hours}{_min=timer._minutes}{_sec=timer._seconds};

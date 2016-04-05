@@ -11,12 +11,20 @@
 # Written by Michael Rodriguez, The Web Pro Miami, Ver.0.1.2016-01-20
 
 TopRule = $* (
-    $time {howlong = 'true'} {hour = time._hour}{min = time._min}{sec = time._sec}
+    $time {howlong = 'true'} {hour = time._hour}{min = time._min}{sec = time._sec} |
+    (for $* ($sec | $min | $bit) {howlong = 'true'} {hour = '0'}{min = '1'}{sec = '0'}) |
+    (for $* (couple *of minutes) {howlong = 'true'} {hour = '0'}{min = '2'}{sec = '0'}) |
+    (for $* (few minutes){hour = '0'}{min = '3'}{sec = '0'}) |
+    (for $* (couple *of hours){hour = '2'}{min = '0'}{sec = '0'}) |
+    (for $* (few hours){hour = '3'}{min = '0'}{sec = '0'})
 ) $*;
 
 # Variable words and phrases
 
 # Simple words and phrases
+sec = sec | second;
+min = (a couple *of seconds) | (a few seconds) | (a tiny bit) | minute;
+bit = bit | (little bit);
 
 # Factory
 time = $factory:timer{_hour=timer._hours}{_min=timer._minutes}{_sec=timer._seconds};

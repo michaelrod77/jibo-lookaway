@@ -40,7 +40,7 @@
                 "        emitter.emit('listen');",
                 "        // Turn on LED",
                 "        jibo.animate.setLEDColor([0.8, 0.8, 1]); // l.blue",
-                "",
+                "        console.log(\"Listening...\");",
                 "    });",
                 "    listener.on('cloud', function(asrResult, speakerIds){",
                 "      notepad.results = asrResult.NLParse;",
@@ -75,7 +75,8 @@
         "parent": 1,
         "children": [
             35,
-            46
+            46,
+            49
         ],
         "decorators": [],
         "options": {}
@@ -188,9 +189,9 @@
     "49": {
         "id": 49,
         "class": "TextToSpeechJs",
-        "name": "Say amount of time to look away",
+        "name": "Say amount of time to look away and handle special cases",
         "asset-pack": "core",
-        "parent": 55,
+        "parent": 19,
         "decorators": [],
         "options": {
             "getWords": [
@@ -219,6 +220,11 @@
                 "      nSpeechText+= nSec + \" \" + nTimeUnit + \" \";",
                 "    }",
                 "    if(nSpeechText){ nSpeechText = \"For \" + nSpeechText; }",
+                "    // Special cases",
+                "    if(nHour && nHour>24){",
+                "      nSpeechText = \"Just call me if you need me.\";",
+                "      notepad.quietMode = \"true\";",
+                "    }",
                 "    if(nSpeechText){ callback(nSpeechText); }",
                 "}"
             ],
@@ -238,7 +244,6 @@
             52
         ],
         "children": [
-            54,
             "35717a3e-99ac-4ea9-8329-055665103bfe",
             57
         ],
@@ -253,7 +258,7 @@
             "conditional": [
                 "() => {",
                 "  let results = notepad.results;",
-                "  //console.log(results);",
+                "  console.log(results);",
                 "  if(parseInt(results.hour) || parseInt(results.min) || parseInt(results.sec)){",
                 "    return false;",
                 "  }",
@@ -295,20 +300,17 @@
     },
     "54": {
         "id": 54,
-        "class": "ExecuteScript",
-        "name": "Turn off LED",
-        "asset-pack": "core",
-        "parent": 51,
+        "class": "PlayAnimation",
+        "name": "Zero",
         "options": {
-            "exec": [
-                "() => {",
-                "  notepad.results = {}; // reset results for new input",
-                "  jibo.animate.setLEDColor([0, 0, 0]);",
-                "  console.log(\"Turning off led...\");",
+            "animPath": "zero.keys",
+            "config": [
+                "(animation) => {",
                 "}"
             ]
         },
-        "skipped": true
+        "asset-pack": "core",
+        "parent": 84
     },
     "55": {
         "id": 55,
@@ -319,10 +321,9 @@
         "decorators": [
             56
         ],
-        "children": [
-            49
-        ],
-        "options": {}
+        "children": [],
+        "options": {},
+        "skipped": true
     },
     "56": {
         "id": 56,
@@ -352,8 +353,7 @@
         "asset-pack": "core",
         "parent": 51,
         "children": [
-            53,
-            "e6477277-bddd-4d18-82b4-1e04303e0816"
+            53
         ],
         "decorators": [
             58
@@ -444,9 +444,10 @@
         "parent": 1,
         "children": [
             87,
-            86,
+            "025b9129-7a5b-4fe2-9930-807861d39b80",
             "3335eedd-a84b-4a71-9a94-32b98dfb9cac",
-            90
+            90,
+            54
         ],
         "options": {}
     },
@@ -455,7 +456,7 @@
         "class": "Subtree",
         "name": "Backwards idle",
         "asset-pack": "core",
-        "parent": 84,
+        "parent": "025b9129-7a5b-4fe2-9930-807861d39b80",
         "decorators": [
             88
         ],
@@ -468,6 +469,8 @@
             ],
             "onResult": [
                 "(treeResult) => {",
+                "  var nCurrTime = Math.round(new Date().getTime()/1000);",
+                "  console.log(\"Backwards idle complete at \"+nCurrTime+\".\");",
                 "}"
             ]
         }
@@ -590,12 +593,12 @@
                 "() => {",
                 "  var animate = require(\"jibo\").animate;",
                 "  animate.centerRobot();",
-                "  console.log(\"centering robot:\",animate);",
                 "}"
             ]
         },
         "asset-pack": "core",
-        "parent": 84
+        "parent": 84,
+        "skipped": true
     },
     "35fac7c0-0bea-4fc6-917e-f7266ddc9c6d": {
         "id": "35fac7c0-0bea-4fc6-917e-f7266ddc9c6d",
@@ -747,41 +750,94 @@
         "asset-pack": "core",
         "parent": "697d9d41-5509-4f40-9378-7b45fa801bb8"
     },
-    "e6477277-bddd-4d18-82b4-1e04303e0816": {
-        "id": "e6477277-bddd-4d18-82b4-1e04303e0816",
-        "class": "ExecuteScript",
-        "name": "process response",
+    "025b9129-7a5b-4fe2-9930-807861d39b80": {
+        "id": "025b9129-7a5b-4fe2-9930-807861d39b80",
+        "class": "Sequence",
+        "name": "",
+        "options": {},
+        "asset-pack": "core",
+        "parent": 84,
+        "children": [
+            86,
+            "3342f7fc-df11-4526-9b5b-8a1a922d2b2f",
+            "0350d06f-85e4-49e4-8050-3dc438d09a5e"
+        ],
+        "decorators": [
+            "1f2f265f-d87c-4578-bbe5-972b2fb5ac14"
+        ]
+    },
+    "3342f7fc-df11-4526-9b5b-8a1a922d2b2f": {
+        "id": "3342f7fc-df11-4526-9b5b-8a1a922d2b2f",
+        "class": "TextToSpeechJs",
+        "name": "Ask \"Can I turn around now?\"",
         "options": {
-            "exec": [
-                "() => {",
-                "  let  nHour = 0, nMin = 0, nSec = 0;",
-                "  let nSpeechText = \"\";",
-                "  let results = notepad.results;",
-                "  if(typeof results!==\"undefined\"){",
-                "    if(typeof results.hour!==\"undefined\"){ nHour = parseInt(results.hour); }",
-                "    if(typeof results.min!==\"undefined\"){ nMin = parseInt(results.min); }",
-                "    if(typeof results.sec!==\"undefined\"){ nSec = parseInt(results.sec); }",
-                "  }",
-                "  if(nHour){",
-                "    let nTimeUnit = \"hours\";",
-                "    if(nHour==1){ nTimeUnit = \"hour\"; }",
-                "    nSpeechText = nHour + \" \" + nTimeUnit + \" \";",
-                "  }",
-                "  if(nMin){",
-                "    let nTimeUnit = \"minutes\";",
-                "    if(nMin==1){ nTimeUnit = \"minute\"; }",
-                "    nSpeechText+= nMin + \" \" + nTimeUnit + \" \";",
-                "  }",
-                "  if(nSec){",
-                "    let nTimeUnit = \"seconds\";",
-                "    if(nSec==1){ nTimeUnit = \"second\"; }",
-                "    nSpeechText+= nSec + \" \" + nTimeUnit + \" \";",
-                "  }",
-                "  console.log(\"nSpeechText:\",nSpeechText);",
+            "getWords": [
+                "(callback) => {",
+                "    let nPhraseARRAY = [",
+                "      \"Can I turn around now?\"",
+                "    ];",
+                "    var nRandPhrase = nPhraseARRAY[Math.floor(Math.random()*nPhraseARRAY.length)];",
+                "    callback(nRandPhrase);",
+                "}"
+            ],
+            "onWord": [
+                "(word) => {",
                 "}"
             ]
         },
         "asset-pack": "core",
-        "parent": 57
+        "parent": "025b9129-7a5b-4fe2-9930-807861d39b80"
+    },
+    "0350d06f-85e4-49e4-8050-3dc438d09a5e": {
+        "id": "0350d06f-85e4-49e4-8050-3dc438d09a5e",
+        "class": "Listen",
+        "name": "Listen for yes/no",
+        "asset-pack": "core",
+        "parent": "025b9129-7a5b-4fe2-9930-807861d39b80",
+        "decorators": [],
+        "options": {
+            "getOptions": [
+                "() => {",
+                "    let options = {",
+                "        heyJibo: false,",
+                "        detectEnd: true,",
+                "        incremental: false,",
+                "        authenticateSpeaker: ''",
+                "    }",
+                "    console.log(\"Listening for if I can turn around or not...\");",
+                "    return options;",
+                "}"
+            ],
+            "rule": "yesno.rule",
+            "onResult": [
+                "(listener) => {",
+                "    listener.on('cloud', (asrResult, speakerIds) => {",
+                "      notepad.results.yesNo = \"no\"; // default",
+                "      if(asrResult.NLParse!==undefined && asrResult.NLParse.yesNo!==undefined){",
+                "        notepad.results.yesNo = asrResult.NLParse.yesNo;",
+                "      }",
+                "    });",
+                "}"
+            ]
+        }
+    },
+    "1f2f265f-d87c-4578-bbe5-972b2fb5ac14": {
+        "id": "1f2f265f-d87c-4578-bbe5-972b2fb5ac14",
+        "class": "WhileCondition",
+        "name": "",
+        "options": {
+            "init": [
+                "() => {",
+                "  notepad.results.yesNo = \"no\"; // default",
+                "}"
+            ],
+            "conditional": [
+                "() => {",
+                "    if(notepad.results.yesNo==\"yes\"){ return false; }",
+                "    return true;",
+                "}"
+            ]
+        },
+        "asset-pack": "core"
     }
 }
