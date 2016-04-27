@@ -15,7 +15,7 @@ Download this package into any folder and open the root in Atom.
 
 ## Usage
 
-Run the skill in the Jibo Simulator ( or on the robot if you're lucky enough). Type (or say) "Hey Jibo", then "Look Away" to begin the skill.
+Run the skill in the Jibo Simulator (or on the robot if you're lucky enough). Type (or say) "Hey Jibo", then "Look Away" to begin the skill.
 
 Following is a complete breakdown of the skill in action:
 
