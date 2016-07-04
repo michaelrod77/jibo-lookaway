@@ -8,6 +8,7 @@
 # Returns:
 # "NLParse": {
 #   "lookaway": "true",
+#   "emotion": "relaxed", // relaxed, excited, or sad
 #   "sec": "1", // may be null
 #   "min": "1", // may be null
 #   "hour": "1", // may be null
@@ -17,9 +18,9 @@
 # Written by Michael Rodriguez, The Web Pro Miami, Ver.0.2.2016-04-04
 
 TopRule = $* (
-    ($lookaway {lookaway = 'true'} {hour = lookaway._hour}{min = lookaway._min}{sec = lookaway._sec} *$quietly {quietly = 'true'}) |
-    ($stoplooking {lookaway = 'true'} {hour = stoplooking._hour}{min = stoplooking._min}{sec = stoplooking._sec} *$quietly {quietly = 'true'}) |
-    ($closeyoureyes {lookaway = 'true'} {hour = closeyoureyes._hour}{min = closeyoureyes._min}{sec = closeyoureyes._sec} *$quietly {quietly = 'true'})
+    ($lookaway {lookaway = 'true'}{emotion = 'excited'} {hour = lookaway._hour}{min = lookaway._min}{sec = lookaway._sec} *$quietly {quietly = 'true'}{emotion = 'relaxed'}) |
+    ($stoplooking {lookaway = 'true'}{emotion = 'sad'} {hour = stoplooking._hour}{min = stoplooking._min}{sec = stoplooking._sec} *$quietly {quietly = 'true'}) |
+    ($closeyoureyes {lookaway = 'true'}{emotion = 'relaxed'} {hour = closeyoureyes._hour}{min = closeyoureyes._min}{sec = closeyoureyes._sec} *$quietly {quietly = 'true'})
 ) $*;
 
 # Variable words and phrases

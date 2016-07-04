@@ -120,16 +120,19 @@
     "32": {
         "id": 32,
         "class": "PlayAnimation",
-        "name": "Turn around.",
+        "name": "relaxed",
         "asset-pack": "core",
-        "parent": 35,
+        "parent": "cf7410b0-fd63-4694-9a69-a3927e09a169",
         "options": {
             "animPath": "lookaway.keys",
             "config": [
                 "(animation) => {",
                 "}"
             ]
-        }
+        },
+        "decorators": [
+            "c55275ff-3e44-4019-9d21-7976bbda3c45"
+        ]
     },
     "34": {
         "id": 34,
@@ -149,7 +152,7 @@
             45,
             34,
             "35fac7c0-0bea-4fc6-917e-f7266ddc9c6d",
-            32,
+            "cf7410b0-fd63-4694-9a69-a3927e09a169",
             63
         ],
         "options": {
@@ -170,6 +173,8 @@
                 "  ",
                 "  let results = notepad.results;",
                 "  notepad.quietMode = results.quietly;",
+                "  notepad.emotion = results.emotion; // relaxed, excited, or sad",
+                "  if(!notepad.emotion){ notepad.emotion = \"relaxed\"; }",
                 "}"
             ]
         }
@@ -607,7 +612,12 @@
         "options": {
             "getWords": [
                 "(callback) => {",
-                "    let nPhraseARRAY = [\"Alright.\", \"Sure.\", \"No problem.\", \"Okay\", \"Ill do it.\"];",
+                "    let nPhraseARRAY = [\"Alright.\", \"Sure.\", \"No problem.\", \"Okay\"]; // relaxed",
+                "    switch(notepad.emotion){",
+                "      case \"excited\": nPhraseARRAY = [\"Cool.\", \"Great.\", \"Awesome.\", \"Ill do it.\"]; break;",
+                "      case \"sad\": nPhraseARRAY = [\"Fine.\", \"Alright.\", \"Okay\"]; break;",
+                "      default: break; // relaxed (just use default)",
+                "    }",
                 "    var nRandPhrase = nPhraseARRAY[Math.floor(Math.random()*nPhraseARRAY.length)];",
                 "    callback(nRandPhrase);",
                 "}"
@@ -835,6 +845,95 @@
                 "() => {",
                 "    if(notepad.results.yesNo==\"yes\"){ return false; }",
                 "    return true;",
+                "}"
+            ]
+        },
+        "asset-pack": "core"
+    },
+    "cf7410b0-fd63-4694-9a69-a3927e09a169": {
+        "id": "cf7410b0-fd63-4694-9a69-a3927e09a169",
+        "class": "Switch",
+        "name": "Turn around.",
+        "options": {},
+        "asset-pack": "core",
+        "parent": 35,
+        "children": [
+            "c7476840-812c-4bb4-9a94-170ba12439e0",
+            "770cdf13-099f-4ba3-80f6-1448954e6591",
+            32
+        ]
+    },
+    "c55275ff-3e44-4019-9d21-7976bbda3c45": {
+        "id": "c55275ff-3e44-4019-9d21-7976bbda3c45",
+        "class": "Case",
+        "name": "",
+        "options": {
+            "conditional": [
+                "() => {",
+                "  if(notepad.emotion == \"relaxed\"){ return true; }",
+                "  return false;",
+                "}"
+            ]
+        },
+        "asset-pack": "core"
+    },
+    "770cdf13-099f-4ba3-80f6-1448954e6591": {
+        "id": "770cdf13-099f-4ba3-80f6-1448954e6591",
+        "class": "PlayAnimation",
+        "name": "sad",
+        "asset-pack": "core",
+        "parent": "cf7410b0-fd63-4694-9a69-a3927e09a169",
+        "options": {
+            "animPath": "lookaway_sad.keys",
+            "config": [
+                "(animation) => {",
+                "}"
+            ]
+        },
+        "decorators": [
+            "95056c1e-9cec-4ae4-98ae-73e8c8eda8de"
+        ]
+    },
+    "95056c1e-9cec-4ae4-98ae-73e8c8eda8de": {
+        "id": "95056c1e-9cec-4ae4-98ae-73e8c8eda8de",
+        "class": "Case",
+        "name": "",
+        "options": {
+            "conditional": [
+                "() => {",
+                "  if(notepad.emotion == \"sad\"){ return true; }",
+                "  return false;",
+                "}"
+            ]
+        },
+        "asset-pack": "core"
+    },
+    "c7476840-812c-4bb4-9a94-170ba12439e0": {
+        "id": "c7476840-812c-4bb4-9a94-170ba12439e0",
+        "class": "PlayAnimation",
+        "name": "excited",
+        "asset-pack": "core",
+        "parent": "cf7410b0-fd63-4694-9a69-a3927e09a169",
+        "options": {
+            "animPath": "lookaway_excited.keys",
+            "config": [
+                "(animation) => {",
+                "}"
+            ]
+        },
+        "decorators": [
+            "3a8607c4-54f9-4537-9dcd-d8a5e62818da"
+        ]
+    },
+    "3a8607c4-54f9-4537-9dcd-d8a5e62818da": {
+        "id": "3a8607c4-54f9-4537-9dcd-d8a5e62818da",
+        "class": "Case",
+        "name": "",
+        "options": {
+            "conditional": [
+                "() => {",
+                "  if(notepad.emotion == \"excited\"){ return true; }",
+                "  return false;",
                 "}"
             ]
         },
